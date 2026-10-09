@@ -9,17 +9,24 @@ object CoffeeMachine {
         when (currentState) {
             is CoffeeMachineState.Idle -> {
                 println("Máquina encendida. Empezando a hacer café...")
-                currentState = CoffeeMachineState.HaciendoCafe
+                currentState = CoffeeMachineState.Pagando
                 Thread.sleep(2000)
-                // Simula un proceso de preparación
-                currentState = CoffeeMachineState.SirviendoCafe("Café con Leche")
-                println("¡Café listo! Estado: $currentState")
+            }
+            is CoffeeMachineState.Pagando -> {
+                println("Se ha realizado el pago")
+                currentState = CoffeeMachineState.RestoPago
+            }
+            // Creo que esto no hacia falta, ya que no es un estado como tal, es una función derivada de Pago
+            is CoffeeMachineState.RestoPago -> {
+                println("Devolviendo Dinero restante...")
+                currentState = CoffeeMachineState.HaciendoCafe
             }
             is CoffeeMachineState.HaciendoCafe -> {
                 println("La máquina ya está haciendo café.")
+                currentState = CoffeeMachineState.SirviendoCafe
             }
             is CoffeeMachineState.SirviendoCafe -> {
-                println("Ya hay café servido. Por favor, toma tu café.")
+                println("El café ya está servido, recoja el producto")
             }
             is CoffeeMachineState.Error -> {
                 println("La máquina tiene un error: ${(currentState as CoffeeMachineState.Error).message}")
@@ -27,9 +34,9 @@ object CoffeeMachine {
         }
     }
 
-    fun clean() {
-        println("Limpiando la máquina...")
+    fun reparando() {
+        println("La máquina no está en correcto funcionamiento y se está reparando, vuelva en otro momento")
         currentState = CoffeeMachineState.Idle
-        println("Máquina limpia. Estado: $currentState")
+        println("Se ha reparado la máquina, ya puede hacer su pedido. Estado: $currentState")
     }
 }
