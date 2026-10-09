@@ -9,8 +9,12 @@ object CoffeeMachine {
         when (currentState) {
             is CoffeeMachineState.Idle -> {
                 println("Máquina encendida. Empezando a hacer café...")
-                currentState = CoffeeMachineState.Pagando
+                currentState = CoffeeMachineState.SeleccionandoCafe("Café con leche")
                 Thread.sleep(2000)
+            }
+            is CoffeeMachineState.SeleccionandoCafe -> {
+                println("Seleccionando café...")
+                currentState = CoffeeMachineState.Pagando
             }
             is CoffeeMachineState.Pagando -> {
                 println("Se ha realizado el pago")
@@ -23,7 +27,7 @@ object CoffeeMachine {
             }
             is CoffeeMachineState.HaciendoCafe -> {
                 println("La máquina ya está haciendo café.")
-                currentState = CoffeeMachineState.SirviendoCafe
+                currentState = CoffeeMachineState.SirviendoCafe("Café con leche")
             }
             is CoffeeMachineState.SirviendoCafe -> {
                 println("El café ya está servido, recoja el producto")
